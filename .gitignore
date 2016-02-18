@@ -51,6 +51,7 @@ crashlytics-build.properties
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
 
 # C extensions
 *.so
@@ -65,6 +66,8 @@ downloads/
 eggs/
 .eggs/
 lib/
+#twitter-count/lib
+twitter-count/tw_secret.py
 lib64/
 parts/
 sdist/
