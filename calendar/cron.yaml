@@ -1,0 +1,4 @@
+cron:
+- description: checkevent
+  url: /cron/check
+  schedule: every 5 minutes
