@@ -47,7 +47,7 @@ class LateAsserter(webapp2.RequestHandler):
         """
         Check if event happened and trigger a message
         """
-
+        print time.time()
         calendars, status = self.fetch_rest_endpoint()
 
         if status == 200:
@@ -55,17 +55,20 @@ class LateAsserter(webapp2.RequestHandler):
             if len(calendars):
                 for c in calendars:
                     for e in c["events"]:
+                        diff = abs(time.time() - int(e["timestamp"]))
                         if int(e["timestamp"]) < time.time():
                             # try to invert the inequality to test if furiere works
-                            diff = time.time() - int(e["timestamp"])
-                            print ('You are late {m} microsec for {e}! Time runs. \n\n'
+                            print ('You are late {m} secs for {e}! Time runs. \n\n'
                                    '!!! What are you doin still here??? RUN RUN RUN !!!\n'
                                    ).format(
                                 m=diff,
                                 e=e["title"]
                             )
                         else:
-                            print '\nStill to come: {e}\n'.format(e=e["title"])
+                            print '\nKeep cool! Still to come: {e} in {m} secs\n'.format(
+                                e=e["title"],
+                                m=diff
+                            )
 
         elif status == 404:
             # url not reachable
