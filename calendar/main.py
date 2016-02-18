@@ -23,7 +23,7 @@ class LateAsserter(webapp2.RequestHandler):
     @classmethod
     def fetch_rest_endpoint(cls):
         """
-        Fetch the resource setting the proper headers
+        Fetch the resource setting the proper headers.
         """
         try:
             response = urlfetch.fetch(
@@ -45,7 +45,7 @@ class LateAsserter(webapp2.RequestHandler):
 
     def get(self):
         """
-        Check if event happened and trigger a message
+        Check if event happened and trigger a message.
         """
         print time.time()
         calendars, status = self.fetch_rest_endpoint()
@@ -53,23 +53,31 @@ class LateAsserter(webapp2.RequestHandler):
         if status == 200:
             # valid response
             if len(calendars):
-                for c in calendars:
-                    for e in c["events"]:
-                        diff = abs(time.time() - int(e["timestamp"]))
-                        if int(e["timestamp"]) < time.time():
-                            # try to invert the inequality to test if furiere works
-                            print ('You are late {m} secs for {e}! Time runs. \n\n'
-                                   '!!! What are you doin still here??? RUN RUN RUN !!!\n'
-                                   ).format(
+                # create a generator to avoid multiple for-looping
+                events = (
+                    (e["title"], abs(time.time() - int(e["timestamp"])), int(e["timestamp"]) < time.time())
+                    for c in calendars
+                    for e in c["events"]
+                )
+                # consume the generator to find if the event is passed or not
+                while True:
+                    try:
+                        title, diff, is_passed = next(events)
+                        if is_passed:
+                            # event is in the past
+                            print 'You are late {m} secs for {e}! Time runs. \n\n'.format(
                                 m=diff,
-                                e=e["title"]
+                                e=title
                             )
                         else:
+                            # event is in the future
                             print '\nKeep cool! Still to come: {e} in {m} secs\n'.format(
-                                e=e["title"],
+                                e=title,
                                 m=diff
                             )
 
+                    except StopIteration:
+                        break
         elif status == 404:
             # url not reachable
             print 'Endpoint is down'
