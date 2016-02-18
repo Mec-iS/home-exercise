@@ -5,7 +5,7 @@ Use a cronjob to check events retrieved from a calendar API. If it's time it tri
 
 ### About Google Calendar API implementation
 Without knowing the full list of requirements for the complete application, I can note only that authentication of users is required
-in the actual implementation. Even passing a secret token in the `Authorization` header instead of the email, the service would still lack of SLS. 
+in the actual implementation. Even passing a secret token in the `Authorization` header instead of the email, the service would still lack of SSL. 
 * Google Calendar API would make everything safe using a secure connection and federated login from/to clients
 * It would allow to delete events and calendars
 * It would let the authorized clients to store/watch changes in user activities 
