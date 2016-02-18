@@ -4,6 +4,10 @@ import twitter
 
 from tw_secret import *
 
+#
+# Create a Twitter API object for authentication.
+# Subscribe an app at <https://dev.twitter.com> to get keys.
+#
 api = twitter.Api(consumer_key=con_secret,
                   consumer_secret=con_secret_key,
                   access_token_key=token,
@@ -13,10 +17,15 @@ api = twitter.Api(consumer_key=con_secret,
 
 class MainHandler(webapp2.RequestHandler):
     def get(self, count=None):
+        """
+        Print on the screen part of the Atooma timeline: 10 or ``count``
+
+        :param count: if the requested count is specified in the path, default to None
+        """
         if count is not None:
             try:
                 count = int(count)
-            except:
+            except ValueError:
                 response = json.dumps({'error': 'count must be a int'})
                 return self.response.write(response)
 
