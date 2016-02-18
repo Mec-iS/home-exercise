@@ -8,7 +8,7 @@ from google.appengine.api import urlfetch
 
 class LateAsserter(webapp2.RequestHandler):
     """
-    Assert the evidence of you being late only when it's actually already too late.
+    Assert the obviousness of being late only when it's actually already too late.
 
     Response expected format:
         ``[
@@ -47,7 +47,6 @@ class LateAsserter(webapp2.RequestHandler):
         """
         Check if event happened and trigger a message.
         """
-        print time.time()
         calendars, status = self.fetch_rest_endpoint()
 
         if status == 200:
